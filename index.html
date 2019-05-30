@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>CapthaGenerator</title>
+</head>
+<body>
+    
+    <div id="main">
+        <canvas id="canvas"  width="200" height="40" style="background-color:aquamarine">
+
+        </canvas>
+        <br>
+        <button onclick="captcha()">Refresh</button>
+        <br><br>
+        <input id="userip" type="text" name="userip" placeholder="Enter Captcha">
+        <button onclick="checkCaptcha()">validate</button>
+    </div>
+
+    <script>
+    
+        window.onload = captcha();
+
+        var ans="";
+        function captcha(){
+
+            //3 nos.
+            var num1 = Math.floor(Math.random()*10);
+            var num2 = Math.floor(Math.random()*10);
+            var num3 = Math.floor(Math.random()*10);
+
+            var charL = ['a','b','c','d','e','f','g'];
+            var charU = ['A','B','C','D','E','F','G'];
+
+            var index2 = Math.floor(Math.random()*7);
+            var index3 = Math.floor(Math.random()*7);
+            
+            //2 chars.
+            var char1 = charL[index2];
+            var char2 = charU[index3];
+
+            //combine 3 and 2
+            var finalArr = [num1, num2, num3, char1, char2];
+
+            //shuffle
+            for(var i=0;i<10;i++) {
+                var p = Math.floor(Math.random()*4);
+                var q = Math.floor(Math.random()*4);
+                
+                var temp = finalArr[p];
+                finalArr[p] = finalArr[q];
+                finalArr[q] = temp;
+            }
+
+            var c = document.getElementById("canvas");
+            var ctx = c.getContext("2d");
+            ctx.font = "30px Arial";
+            ctx.clearRect(0, 0, c.width, c.height);
+
+            //paint values in canvas
+            ctx.fillText(finalArr[0].toString(), 9, 20);
+            ctx.fillText(finalArr[1].toString(), 24, 26);
+            ctx.fillText(finalArr[2].toString(), 36, 20);
+            ctx.fillText(finalArr[3].toString(), 50, 22);
+            ctx.fillText(finalArr[4].toString(), 65, 24);
+
+            //put finalArr in string ans
+            ans = finalArr[0].toString() + finalArr[1].toString() + finalArr[2].toString() + finalArr[3].toString() + finalArr[4].toString();
+            console.log(ans);
+        }
+
+        function checkCaptcha() {
+            var input = document.getElementById('userip').value;
+            if(input === ans){
+                window.location.href = "dashboard.html";
+            }
+            else{
+                alert('Wrong');
+                captcha();
+            }
+        }
+
+    </script>
+
+</body>
+</html>
